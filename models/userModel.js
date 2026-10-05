@@ -1,29 +1,27 @@
 const db = require("../config/db");
 
-const User = {
-  // Create
-  async create(userData) {
-    const { username, lastname, firstname, passwd, email, urole } = userData;
-    const sql = `INSERT INTO users (username, lastname, firstname, passwd, email, urole) VALUES (?, ?, ?, ?, ?, ?)`;
-    const [result] = await db.execute(sql, [username, lastname, firstname, passwd, email, urole]);
+const Course = {
+  // Create a new course
+  async create(courseData) {
+    const { courseNo, courseDesc, lastSemTaught, maxStudents } = courseData;
+    const sql = `INSERT INTO courses (courseNo, courseDesc, lastSemTaught, maxStudents) VALUES (?, ?, ?, ?)`;
+    const [result] = await db.execute(sql, [courseNo, courseDesc, lastSemTaught, maxStudents]);
     return result.insertId;
   },
 
-  // Read All
+  // Read All courses 
   async findAll() {
-    const sql = `SELECT userID, username, lastname, firstname, email, urole, lastModified FROM users`;
+    const sql = `SELECT courseID, courseNo, courseDesc, lastSemTaught, maxStudents FROM courses`;
     const [rows] = await db.execute(sql);
     return rows;
   },
 
-  // Read One by ID
+  // Read One course by ID
   async findById(id) {
-    const sql = `SELECT userID, username, lastname, firstname, email, urole, lastModified FROM users WHERE userID = ?`;
+    const sql = `SELECT courseID, courseNo, courseDesc, lastSemTaught, maxStudents FROM courses WHERE courseID = ?`;
     const [rows] = await db.execute(sql, [id]);
     return rows[0] || null;
   },
-
-
 };
 
-module.exports = User;
+module.exports = Course;

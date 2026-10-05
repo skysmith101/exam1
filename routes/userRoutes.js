@@ -1,49 +1,47 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/userModel");
 
-// Endpoint: GET /api/users - Find all users (READ)
+const Course = require("../models/userModel"); 
+
+// Endpoint: GET /api/courses - Find all courses (READ)
 router.get("/", async function (req, res) {
   try {
-    const users = await User.findAll();
-    res.status(200).json({ success: true, data: users });
+    const courses = await Course.findAll();
+    res.status(200).json({ success: true, data: courses });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Endpoint: GET /api/users/:id - Find single user (READ)
+// Endpoint: GET /api/courses/:id - Find single course (READ)
 router.get("/:id", async function (req, res) {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User not found" });
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ success: false, error: "Course not found" });
     }
-    res.status(200).json({ success: true, data: user });
+    res.status(200).json({ success: true, data: course });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Endpoint: POST /api/users - Add new user (CREATE)
+// Endpoint: POST /api/courses - Add new course (CREATE)
 router.post("/", async function (req, res) {
   try {
-    const { username } = req.body;
-    if (!username) {
-      return res.status(400).json({ success: false, error: 'Field "username" is required.' });
+    
+    const { courseNo } = req.body;
+    if (!courseNo) {
+      return res.status(400).json({ success: false, error: 'Field "courseNo" is required.' });
     }
 
-    const insertId = await User.create(req.body);
-    const newUser = await User.findById(insertId);
+    const insertId = await Course.create(req.body);
+    const newCourse = await Course.findById(insertId);
 
-    res.status(201).json({ success: true, data: newUser });
+    res.status(201).json({ success: true, data: newCourse });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
-
-
-
 
 module.exports = router;
